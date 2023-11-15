@@ -1,20 +1,15 @@
 <html ng-app="app">
 <head>
     <meta charset="utf-8">
-    <base href="http://u-u-x-l.oss-cn-hangzhou.aliyuncs.com"/>
+    <base href="http://x-d-y-3.oss-cn-hangzhou.aliyuncs.com"/>
     <link rel="icon" href="data:image/ico;base64,aWNv">
     <meta name="viewport"
           content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta name="format-detection" content="telephone=no"/>
     <meta name="msapplication-tap-highlight" content="no"/>
     <title>房卡记录</title>
-    <script type="text/javascript" src="/files/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/files/js/bscroll.min.js"></script>
-    <script type="text/javascript" src="/files/js/angular.min.js"></script>
-    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script type="text/javascript" src="/files/js/fastclick.js"></script>
     <script type="text/javascript">
-                var _thost = 'http://' + window.location.host;
+        var _thost = 'http://' + window.location.host;
         var pathArr = window.location.pathname.split("/");
         if(pathArr.length==3 && pathArr[1] != ""){
             if(pathArr[1].search(".html")!=-1){
@@ -22,13 +17,18 @@
             }else{
                 _thost = 'http://' + window.location.host + "/" + pathArr[1];
             }
-        }
-        var _tt = new Date().getTime();
-        document.write('<script type="text/javascript" src="' + _thost + '/js/config.js?v=1' + _tt + '"> <\/script>');
-    </script>
-    <script type="text/javascript" src="/js/load.js?v=11101"></script>
-
+        }          
+		var _tt = new Date().getTime();
+        document.write('<script type="text/javascript" src="' + _thost + '/js/config.js?v=' + _tt + '"> <\/script>');
+    </script>    
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="/files/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/files/js/bscroll.min.js"></script>
+    <script type="text/javascript" src="/files/js/angular.min.js"></script>
+    <script type="text/javascript" src="/files/js/fastclick.js"></script>
+    <script type="text/javascript" src="/js/load.js?v=123"></script>
     <script type="text/javascript">
+
         var code = DynLoading.getUrlParam("code");
         let token = window.localStorage.getItem('token');
         if (!token) {
@@ -85,11 +85,14 @@
             wx.ready(function () {
                 wx.hideOptionMenu();
             });
+            ;
+
         });
 
         var globalData = {}
-        globalData.wid = "1";
-        globalData.tt = "1";
+        globalData.wid = obj.data.wid;
+        globalData.tt = obj.data.tt;
+        globalData.tk = token;
 
         var app = angular.module('app', [])
 
@@ -99,11 +102,12 @@
             $scope.baseURL = BaseUrl + "/";
 
             $scope.userInfo = {
-                "id": obj.data.account_id,
-                "name": obj.data.user.nickname,
+                "accountId": obj.data.account_id,
+                "nickname": obj.data.user.nickname,
                 "avatar": obj.data.user.headimgurl,
                 "card": 0,
             }
+
             $scope.userInfo.card = "";
 
             $scope.outRedPackages = new Array();
@@ -119,38 +123,44 @@
             $scope.outTotalPage = 1;
             $scope.receivePage = 0;
             $scope.receiveTotalPage = 1;
-            $scope.showTip = false;
 
             $(".main").show();
             $("#loading").hide();
 
-            $scope.initOutScroll = function () {
-                setTimeout(function () {
-                    $scope.$apply();
+            $scope.backHall = function () {
+                //DynLoading.goto('/');
+                 var url = DynLoading.getPath('/');
+                 //window.location.href = url   
+                 window.location.replace(url)
+            },
 
-                    if (!$scope.outBScroll) {
-                        $scope.outBScroll = new BScroll(document.getElementById('out-box'), {
-                            startX: 0,
-                            startY: 0,
-                            scrollY: true,
-                            scrollX: false,
-                            click: true,
-                            probeType: 1,
-                            bounce: false,
-                        });
+                $scope.initOutScroll = function () {
+                    setTimeout(function () {
+                        $scope.$apply();
 
-                        $scope.outBScroll.on('touchend', function (position) {
-                            // if(position.y <= (this.maxScrollY + 30)&& $scope.canLoadOut) {
-                            if (position.y <= (this.maxScrollY + 30)) {
-                                $scope.canLoadOut = false;
-                                $scope.loadMoreOut();
-                            }
-                        });
-                    } else {
-                        $scope.outBScroll.refresh();
-                    }
-                }, 10);
-            }
+                        if (!$scope.outBScroll) {
+                            $scope.outBScroll = new BScroll(document.getElementById('out-box'), {
+                                startX: 0,
+                                startY: 0,
+                                scrollY: true,
+                                scrollX: false,
+                                click: true,
+                                probeType: 1,
+                                bounce: false,
+                            });
+
+                            $scope.outBScroll.on('touchend', function (position) {
+                                // if(position.y <= (this.maxScrollY + 30) && $scope.canLoadOut) {
+                                if (position.y <= (this.maxScrollY + 30)) {
+                                    $scope.canLoadOut = false;
+                                    $scope.loadMoreOut();
+                                }
+                            });
+                        } else {
+                            $scope.outBScroll.refresh();
+                        }
+                    }, 10);
+                }
 
             $scope.initReceiveScroll = function () {
                 setTimeout(function () {
@@ -199,10 +209,6 @@
             $scope.loadMoreOut = function () {
                 if ($scope.outPage >= $scope.outTotalPage) {
                     $scope.canLoadOut = true;
-                    $scope.showTip = true;
-                    // setTimeout(function () {
-                    //     $scope.showTip=false;
-                    // },1000)
                     return;
                 }
 
@@ -224,7 +230,11 @@
                 $http({
                     url: BaseUrl + '/ay1/sRP',
                     method: 'POST',
-                    header: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    //withCredentials: true,//必须要填
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        //"Authorization": DynLoading.getWwid()
+                    },
                     data: {
                         'account_id': $scope.userInfo.id,
                         'page': $scope.outPage + 1,
@@ -240,28 +250,12 @@
                             var code = data.data[x].code;
 
                             if ($scope.outCodes.indexOf(code) < 0) {
-                                var tmpTime = formatShowTime(data.data[x].create_time);
-                                var content = '未领取';
-                                var color = 'orange';
-                                if (data.data[x].is_receive == 1) {
-                                    content = '已领取';
-                                    color = 'lightgray';
-
-                                    if (data.data[x].is_return == 1) {
-                                        content = '已过期退回';
-                                    }
-                                }
-
-                                var value = {
-                                    'name': '房卡包',
-                                    'content': content,
-                                    'time': tmpTime,
-                                    'count': data.data[x].ticket_count,
-                                    'origin': data.data[x],
-                                }
+                                // var tmpTime = formatShowTime(data.data[x].create_time);
+                                data.data[x].create_time = formatShowTime(data.data[x].create_time);
+                                data.data[x].receive_time = formatShowTime(data.data[x].receive_time);
 
                                 $scope.outCodes.push(code);
-                                $scope.outRedPackages.push(value);
+                                $scope.outRedPackages.push(data.data[x]);
                             }
 
                         }
@@ -282,7 +276,11 @@
                 $http({
                     url: BaseUrl + '/ay1/rRP',
                     method: 'POST',
-                    header: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    //withCredentials: true,//必须要填
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        //"Authorization": DynLoading.getWwid()
+                    },
                     data: {
                         'account_id': $scope.userInfo.id,
                         'page': $scope.receivePage + 1,
@@ -297,24 +295,12 @@
 
                         for (x in data.data) {
                             var code = data.data[x].code;
-
                             if ($scope.receiveCodes.indexOf(code) < 0) {
-                                var tmpTime = formatShowTime(data.data[x].receive_time);
-                                var content = '已领取';
-                                var value = {
-                                    'name': data.data[x].nickname,
-                                    'content': content,
-                                    'time': tmpTime,
-                                    'count': data.data[x].ticket_count,
-                                    'origin': data.data[x],
-                                }
-
+                                data.data[x].receive_time = formatShowTime(data.data[x].receive_time);
                                 $scope.receiveCodes.push(code);
-                                $scope.receiveRedPackages.push(value);
+                                $scope.receiveRedPackages.push(data.data[x]);
                             }
-
                         }
-
                         $scope.initReceiveScroll();
                         $scope.canLoadReceive = true;
 
@@ -327,36 +313,34 @@
 
             $scope.getOutRedPackage();
             $scope.getReceiveRedPackage();
+            $scope.packageType = 1;
 
             //切换到发出记录
             $scope.clickOutRedPackage = function () {
+                $scope.packageType = 1;
                 $(".outDiv").show();
                 $(".receiveDiv").hide();
-
-                $("#selectTab").css("left", $scope.width * 0.15 + 'px');
-                $("#outRP").css("color", "white");
-                $("#reveiveRP").css("color", "black");
 
                 $scope.initOutScroll();
             }
 
             //切换到收取记录
             $scope.clickReceiveRedPackage = function () {
+                $scope.packageType = 2;
                 $(".receiveDiv").show();
                 $(".outDiv").hide();
-
-                $("#selectTab").css("left", $scope.width * 0.51 + 'px');
-                $("#outRP").css("color", "black");
-                $("#reveiveRP").css("color", "white");
 
                 $scope.initReceiveScroll();
             }
 
             $scope.clickCell = function (data) {
                 console.log(data);
+                //window.location.href = "<?php echo $base_url;?>ay/rpD?red_code=" + data.code + '&wid='+ globalData.wid;
+                //window.location.href = "/packageDetail.html?red_code=" + data.code + '&wid=' + globalData.wid;
                 DynLoading.goto('packageDetail', "red_code=" + data.code);
             }
         })
+
         // app.directive('whenScrolled', function() {
         //   return function(scope, elm, attr) {
         //     var raw = elm[0];
@@ -369,54 +353,37 @@
         // });
 
     </script>
+
 </head>
 <link rel="stylesheet" type="text/css" href="/files/css/activity.css">
 
-<style>
-    .showTip {
-        background: rgba(0, 0, 0, 0.6);
-        border-radius: 8px;
-        color: #fff;
-        font-size: 18px;
-        width: 160px;
-        height: 80px;
-        line-height: 80px;
-        text-align: center;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        margin: -80px 0 0 -80px;
-        z-index: 9;
-    }
-</style>
-<body ng-controller="myCtrl" style="background: #fff;">
+<body ng-controller="myCtrl" style="background: url(/files/images/daoyou/package/bg.jpg); background-size: 100% 100%;">
 <div style="position: fixed;width:100%;height:100%;top:0;left:0;background: #000" id="loading">
     <img src="/files/images/common/loading.gif"
          style="top: 40%;position: absolute;left: 50%;margin-left: -45px;margin-top: -45px;"/>
 </div>
-<!--<div class="showTip" ng-if="showTip==true">没有更多数据</div>-->
-
 <div class="main" style="display: none;">
 
     <div id="out-box" class="outDiv"
          style="position: fixed;top: 84px; width: 100%; height: {{height - 84}}px; overflow: hidden; display: none;">
         <div id="out-scroll" style="position: relative;width: 100%;">
-            <div ng-model="outRedPackages" ng-repeat="record in outRedPackages" style="overflow: hidden; height: 80px;"
-                 ng-click="clickCell(record.origin)">
+            <div ng-model="outRedPackages" ng-repeat="record in outRedPackages"
+                 style="overflow: hidden; height: 80px;background: url(/files/images/daoyou/page/item-bg.png); background-size: 100% 100%;width: 96vw;margin-left: 2vw;position: relative;"
+                 ng-click="clickCell(record)">
                 <div style="height: 80px;">
-                    <label style="position: relative; margin-left: {{width * 0.08}}px; top: 10px; width: {{width * 0.42}}px; color: black; overflow: hidden; display: block; height: 24px;">
-                        {{record.name}}</label>
-                    <label style="position: relative; margin-left: {{width * 0.5}}px; margin-top: -14px; width: {{width * 0.42}}px; text-align: right; color: black; overflow: hidden; display: block; height: 24px;">
-                        {{record.count}}张</label>
-                    <label style="position: relative; top: 5px; margin-left: {{width * 0.08}}px; width: {{width * 0.42}}px; color: lightgray; overflow: hidden; display: block; height: 24px;">
-                        {{record.time}}</label>
-                    <label ng-if="record.content == '未领取'"
-                           style="position: relative; top: -20px; margin-left: {{width * 0.5}}px; width: {{width * 0.42}}px; text-align: right; color: orange; overflow: hidden; display: block; height: 24px;">
-                        {{record.content}}</label>
-                    <label ng-if="record.content == '已领取' || record.content == '已过期退回'"
-                           style="position: relative; top: -20px; margin-left: {{width * 0.5}}px; width: {{width * 0.42}}px; text-align: right; color: lightgray; overflow: hidden; display: block; height: 24px;">
-                        {{record.content}}</label>
-                    <label style="position: relative; margin-left: 0px; top: -11; background-color: lightgray; height: 0.8px; width: 100%; overflow: hidden; display: block;"></label>
+                    <label style="position: absolute; right: 2vw;top: 2vh; text-align: right; color: #d45e47; overflow: hidden; display: block; height: 24px;">
+                        {{record.ticket_count}}张房卡</label>
+                    <label style="position: absolute;bottom: 5px;right: 5px;text-align: right;width: 173.88px;color: #aaa;height: 24px;">
+                        {{record.is_receive == 1 ? record.receive_time : record.create_time}}</label>
+                    <img ng-if="record.is_receive == 0" src="/files/images/daoyou/package/package_box.png"
+                         style="position: absolute;width: 16vw;top: 50%;left: 3vw;transform: translateY(-50%);">
+                    <div ng-if="record.is_receive == 1"
+                         style="position: absolute;width: 13vw;top: 50%;left: 3vw;transform: translateY(-50%);background: url(<?php echo $file_url;?>files/images/daoyou/page/avatar_box.png); background-size: 100% 100%;">
+                        <img ng-src="{{record.receive_headimgurl}}"
+                             style="width: 12vw;height: 12vw;margin: 0.5vw;border-radius: 1vw;">
+                    </div>
+                    <label style="position: absolute; left: 22vw;color: gray; height: 24px;top: 50%;transform: translateY(-50%);font-size: 18px;width: 50%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                        {{record.is_receive == 0 ? '未领取' : record.receive_nickname}}</label>
                 </div>
             </div>
         </div>
@@ -427,35 +394,33 @@
          when-scrolled="loadMoreReceive()">
         <div id="receive-box" style="position: relative;width: 100%">
             <div ng-model="receiveRedPackages" ng-repeat="value in receiveRedPackages"
-                 style="overflow: hidden; height: 80px;" ng-click="clickCell(value.origin)">
+                 style="overflow: hidden; height: 80px;position: relative;background: url(/files/images/daoyou/page/item-bg.png); background-size: 100% 100%;width: 96vw;margin-left: 2vw;"
+                 ng-click="clickCell(value)">
                 <div style="height: 80px;">
-                    <label style="position: relative; margin-left: {{width * 0.08}}px; top: 10px; width: {{width * 0.42}}px; color: black; overflow: hidden; display: block; height: 24px;">
-                        {{value.name}}</label>
-                    <label style="position: relative; margin-left: {{width * 0.5}}px; margin-top: -14px; width: {{width * 0.42}}px; text-align: right; color: black; overflow: hidden; display: block; height: 24px;">
-                        {{value.count}}张</label>
-                    <label style="position: relative; top: 5px; margin-left: {{width * 0.08}}px; width: {{width * 0.42}}px; color: lightgray; overflow: hidden; display: block; height: 24px;">
-                        {{value.time}}</label>
-                    <label style="position: relative; top: -20px; margin-left: {{width * 0.5}}px; width: {{width * 0.42}}px; text-align: right; color:lightgray; overflow: hidden; display: block; height: 24px;">
-                        {{value.content}}</label>
-                    <label style="position: relative; margin-left: 0px; top: -11; background-color: lightgray; height: 0.8px; width: 100%; overflow: hidden; display: block;"></label>
+                    <label style="position: absolute; right: 2vw;top: 2vh; text-align: right; color: #d45e47; overflow: hidden; display: block; height: 24px;">
+                        {{value.ticket_count}}张房卡</label>
+                    <label style="position: absolute;bottom: 5px;right: 5px;text-align: right;width: 173.88px;color: #aaa;height: 24px;">
+                        {{value.receive_time}}</label>
+                    <div style="position: absolute;width: 13vw;top: 50%;left: 3vw;transform: translateY(-50%);background: url(/files/images/daoyou/page/avatar_box.png); background-size: 100% 100%;">
+                        <img ng-src="{{value.headimgurl}}"
+                             style="width: 12vw;height: 12vw;margin: 0.5vw;border-radius: 1vw;">
+                    </div>
+                    <label style="position: absolute; left: 22vw;color: gray; height: 24px;top: 50%;transform: translateY(-50%);font-size: 18px;">
+                        {{value.nickname}}</label>
                 </div>
             </div>
         </div>
     </div>
 
-    <div style="position: fixed; height: 44px; top: 20px; left: {{width * 0.15}}px; width: {{width * 0.7}}px; border-color: orange; border-style: solid; border-radius: 30px; border-width: 2px; background-color: white; overflow: hidden;">
-    </div>
-
-    <div id="selectTab"
-         style="position: fixed; top: 20px; left:{{width * 0.15}}px; width: {{width * 0.35}}px; height: 46px; background-color: orange;border-radius: 23px; z-index: 1"></div>
-    <label id="outRP"
-           style="font-size: 13pt; text-align: center; color: white; position: fixed; top: 32px; left: {{width * 0.15}}px; width: {{width * 0.35}}px; z-index: 2"
-           ng-click="clickOutRedPackage()">发出房卡</label>
-    <label id="reveiveRP"
-           style="font-size: 13pt; text-align: center; color: black; position: fixed; top: 32px; left: {{width * 0.15 + width * 0.35}}px; width: {{width * 0.35}}px; z-index: 2"
-           ng-click="clickReceiveRedPackage()">收到房卡</label>
+    <img ng-src="/files/images/daoyou/common/back3.png" ng-click="backHall()"
+         style="position: absolute;left: 2vw;top: 1.5vh;width: 11vw;">
+    <img ng-src="/files/images/daoyou/package/receive{{packageType}}.png" ng-click="clickReceiveRedPackage()"
+         style="position: absolute;left: 18vw;top: 2vh;width: 30vw;">
+    <img ng-src="/files/images/daoyou/package/send{{packageType}}.png" ng-click="clickOutRedPackage()"
+         style="position: absolute;left: 52vw;top: 2vh;width: 30vw;">
 
     <div class="swiper-pagination" style="display: none;"></div>
+
 </div>
 <script type="text/javascript">
     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {

@@ -1,21 +1,15 @@
 <html ng-app="app">
 <head>
     <meta charset="utf-8">
-    <base href="http://u-u-x-l.oss-cn-hangzhou.aliyuncs.com"/>
+    <base href="http://x-d-y-3.oss-cn-hangzhou.aliyuncs.com"/>
     <link rel="icon" href="data:image/ico;base64,aWNv">
     <meta name="viewport"
           content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta name="format-detection" content="telephone=no"/>
     <meta name="msapplication-tap-highlight" content="no"/>
     <title>房卡包</title>
-    <script type="text/javascript" src="/files/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/files/js/angular.min.js"></script>
-    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script type="text/javascript" src="/files/js/fastclick.js"></script>
-    <script type="text/javascript" src="/files/js/clipboard.min.js"></script>
-    <script type="text/javascript" src="/files/js/fuzhi.js?v=120118029172"></script>
     <script type="text/javascript">
-                var _thost = 'http://' + window.location.host;
+        var _thost = 'http://' + window.location.host;
         var pathArr = window.location.pathname.split("/");
         if(pathArr.length==3 && pathArr[1] != ""){
             if(pathArr[1].search(".html")!=-1){
@@ -23,11 +17,18 @@
             }else{
                 _thost = 'http://' + window.location.host + "/" + pathArr[1];
             }
-        }
-        var _tt = new Date().getTime();
-        document.write('<script type="text/javascript" src="' + _thost + '/js/config.js?v=1' + _tt + '"> <\/script>');
-        document.write('<script type="text/javascript" src="/js/load.js?v=1' + new Date().getTime() + '"> <\/script>');
-    </script>
+        }  
+		var _tt = new Date().getTime();
+        document.write('<script type="text/javascript" src="' + _thost + '/js/config.js?v=' + _tt + '"> <\/script>');
+        document.write('<script type="text/javascript" src="/js/load.js?v=' + new Date().getTime() + '"> <\/script>');
+        //var vConsole = new VConsole();
+    </script>    
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="/files/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/files/js/angular.min.js"></script>
+    <script type="text/javascript" src="/files/js/fastclick.js"></script>
+    <script type="text/javascript" src="/files/js/clipboard.min.js"></script>
+    <script type="text/javascript" src="/files/js/fuzhi_xl.js?v=201180291723"></script>
     <style>
         .pointBag {
         }
@@ -80,7 +81,7 @@
             background: rgba(0, 0, 0, .6);
             color: #fff;
             position: fixed;
-            bottom: 16.6rem;
+            top: 50vh;
             font-size: .9rem;
             border-radius: 5px;
             padding: 10px;
@@ -96,10 +97,10 @@
 
         .zhuonuo {
             position: fixed;
-            right: 0;
-            width: 5.8rem;
+            right: 0.5rem;
+            width: 3rem;
             z-index: 89;
-            top: 1.8rem;
+            top: 1rem;
         }
 
         #dialog {
@@ -134,11 +135,65 @@
             right: -20px;
             width: 35px;
         }
+
+        .btnOpen {
+            position: absolute;
+            width: 36vw;
+            height: 17vh;
+            left: 50%;
+            top: 48vh;
+            transform: translateX(-50%);
+            animation: btnOpen 2s infinite;
+        }
+
+        @keyframes btnOpen {
+            0% {
+                width: 34vw;
+                height: 15vh;
+            }
+            50% {
+                width: 44vw;
+                height: 20vh;
+            }
+            100% {
+                width: 34vw;
+                height: 15vh;
+            }
+        }
+
+        .light {
+            position: absolute;
+            width: 55vw;
+            height: 30vh;
+            left: 50%;
+            top: 41vh;
+            margin-left: -26vw;
+            transform: translateX(-50%);
+            animation: light 1.5s linear infinite;
+        }
+
+        @keyframes light {
+            from {
+                transform: rotate(0deg)
+            }
+            to {
+                transform: rotate(359deg)
+            }
+        }
+
+        .backToHall {
+            position: fixed;
+            left: 0.5rem;
+            width: 3rem;
+            z-index: 89;
+            top: 1rem;
+        }
     </style>
 </head>
 <link rel="stylesheet" type="text/css" href="/files/css/activity.css">
 
-<body ng-controller="myCtrl" style="background: #eeb053;">
+<body ng-controller="myCtrl"
+      style="background: url(/files/images/daoyou/package/package_bg.jpg);background-size: 100% 100%;">
 <div style="position: fixed;width:100%;height:100%;top:0;left:0;background: #000" id="loading">
     <img src="/files/images/loading.gif"
          style="top: 40%;position: absolute;left: 50%;margin-left: -45px;margin-top: -45px;"/>
@@ -154,33 +209,35 @@
         </p>
     </div>
 
+    <img src="/files/images/daoyou/common/back3.png" class="backToHall" ng-click="backToHall()">
+
     <span class="copy-tip" id="tips" style="display:none">已复制到剪贴板</span>
-    <img src="/files/images/common/33fz.png" class="needsclick zhuonuo copyUrl" data-clipboard-action="copy"
-         id="copy_btn" onclick="fuzhiMain.link()"/>
+    <img src="/files/images/daoyou/club/btn_copy.png" class="needsclick zhuonuo copyUrl"
+         data-clipboard-action="copy" id="copy_btn" onclick="fuzhiMain.link()"/>
     <textarea id="room_str" readonly="readonly"></textarea>
 
-    <!--<img src="/files/images/redpackage/redpackage_bg.jpg" style="width: 100%;position: relative;" usemap="#planetmap" />-->
+    <!--<img src="<?php echo $file_url;?>files/images/redpackage/redpackage_bg.jpg" style="width: 100%;position: relative;" usemap="#planetmap" />-->
 
-    <img src="/files/images/redpackage/fly.png" style="width: 100%;margin-top:15%" usemap="#planetmap"/>
-    <div id="notopen"
-         style="position: absolute; height: {{rpHeight}}px; width: {{rpWidth}}px; top: {{rpTop}}px; left: {{rpLeft}}px; display: none;">
-        <img src="/files/images/redpackage/redpackage_new_1.png" style="width: 100%; height:100%;"/>
+    <img src="/files/images/redpackage/fly.png" style="width: 100%;margin-top:15%"
+         usemap="#planetmap"/>
+    <div id="notopen" style="position: fixed;height: 100vh;width: 100vw;top: 0;left: 0;">
 
         <div class="user"
-             style="position: absolute; height: {{width * 0.181}}; top: {{rpTop - rpTop * 0.76}}px; width: 100%; left: 0px;">
+             style="position: absolute;width: 17.5vw;height: 17.5vw;left: 50%;top: 3vh;transform: translateX(-50%);background: url(/files/images/daoyou/page/avatar_box.png);background-size: 100% 100%;">
             <img ng-src="{{redPackage.sendAvatar}}" class="avatar"
-                 style="position: absolute; width:{{width*0.132}}px; height:{{width*0.132}}px; margin-left:{{(rpWidth - width * 0.132) / 2}}px; margin-top:{{width*0.02}}px; "/>
+                 style="position: absolute;width: 16vw;top: 0.5vw;height: 16vw;left: 50%;transform: translateX(-50%);"/>
         </div>
 
-        <p style="position: absolute; color: rgb(255,227,104); width: 90%; left: 5%; top: {{rpHeight * 0.70}}; height: auto; text-align: center; font-size: 11pt; word-wrap: break-word; word-break: break-all;">
-            {{redPackage.sendName}}<br/>给你发了一个房卡包
+        <p style="position: absolute; color: #fedf00; width: 90%; left: 5%; top: 14vh; height: auto; text-align: center; font-size: 17pt; word-wrap: break-word; word-break: break-all;">
+            <span style="color: #fff;">{{redPackage.sendName}}</span>
+            <br/>
+            给你发了一个房卡包
         </p>
 
-        <div class="btnOpen"
-             style="position: absolute; height: {{width * 1.02 / 4.5}}px; width: {{width * 1.02 / 4.5}}px; left: {{(rpWidth - width * 1.02 / 4.5) / 2}}px; top: {{rpHeight * 0.42}}px;"
-             ng-click="clickOpenRedPackage()">
-            <img src="/files/images/redpackage/rp_get_1.png"
-                 style="width: 100%;position: relative;height:100%; transform: rotate({{img.rotate}}deg);"/>
+
+        <div ng-click="clickOpenRedPackage()">
+            <img class="light" src="/files/images/daoyou/package/light.png"/>
+            <img class="btnOpen" src="/files/images/daoyou/package/package_box.png"/>
         </div>
         <!-- <div  style="position: absolute; height: {{width * 1.02 / 1.8 / 5.1}}px; width: {{width * 1.02 / 1.8}}px; left: {{(rpWidth - width * 1.02 / 1.8) / 2}}px; top: {{rpHeight * 0.45}}px;" ng-click="clickOpenRedPackage()">
             <img id="openImg" src="http://file.szlangya.cn/files/images/redpackage/redpackage_get_btn.png" style="width: 100%;position: relative;height:100%; " />
@@ -191,36 +248,46 @@
         </div>
     </div>
 
-    <div id="ropen"
-         style="position: absolute; height: {{rpHeight}}px; width: {{rpWidth}}px; top: {{rpTop}}px; left: {{rpLeft}}px; display: none;">
-        <img src="/files/images/redpackage/redpackage_receive_new_1.png" style="width: 100%;height:100%"/>
+    <div id="ropen" style="position: fixed;height: 100vh;width: 100vw;top: 0;left: 0; display: none;">
+        <img src="/files/images/daoyou/package/package_bg2.jpg" style="width: 100%;height:50vh"/>
 
         <div class="user"
-             style="position: absolute; height: {{width * 0.181}}; top: {{rpTop - rpTop * 0.76}}px; width: 100%; left: 0px;">
+             style="position: absolute;width: 17.5vw;height: 17.5vw;left: 50%;top: 6vh;transform: translateX(-50%);background: url(/files/images/daoyou/page/avatar_box.png);background-size: 100% 100%;">
             <img ng-src="{{redPackage.sendAvatar}}" class="avatar"
-                 style="position: absolute; width:{{width*0.132}}px; height:{{width*0.132}}px; margin-left:{{(rpWidth - width * 0.132) / 2}}px; margin-top:{{width*0.02}}px; "/>
+                 style="position: absolute;width: 16vw;top: 0.5vw;height: 16vw;left: 50%;transform: translateX(-50%);"/>
         </div>
 
-        <p style="position: absolute; color: rgb(255,227,104); width: 90%; left: 5%;top: {{rpHeight * 0.62}} ; text-align: center; font-size: 11pt;">
-            {{redPackage.sendName}}的房卡包</p>
+        <p style="position: absolute; color: #fff; width: 90%; left: 5%; top: 17vh; text-align: center; font-size: 16pt;">
+            来自 {{redPackage.sendName}} 的房卡红包</p>
 
+        <p style="position: absolute; color: #fdcb00; width: 90%; left: 5%; top: 28vh; text-align: center; font-size: 44pt;">
+            {{redPackage.count}} <span style="font-size: 16pt;">张</span></p>
 
-        <img ng-src="{{redPackage.receiveAvatar}}" ng-model="redPackage.receiveAvatar" class="avatarReceiver"
-             style="position: absolute; top: {{rpHeight * 0.8}}px; left: {{rpX}}px; width:{{width * 0.1}}; height:{{width * 0.1}};  border-radius: 4px"/>
-        <p style="font-size: 11pt; position: absolute; color: black; text-align: left; top: {{rpHeight * 0.8}}px; left: {{receiveNameX}}px; width: {{receiveNameWidth}}px; height: auto;"
-           ng-model="redPackage.receiveName">
-            <span style="color: black; word-wrap: break-word; word-break: break-all; width: {{receiveNameWidth}};">{{redPackage.receiveName}}</span>
-            <br/>
-            <span style="color: lightgray">{{redPackage.showTime}}</span>
+        <p style="position: absolute; color: #fff; width: 90%; left: 5%; top: 40vh; text-align: center; font-size: 18pt;">
+            可用于创建房间</p>
+
+        <p style="position: fixed; width: 100vw; height: 50vh;top: 50vh; left: 0;font-size: 11pt; color: black; text-align: left; background: #fff;">
+        <div class="user"
+             style="position: absolute;width: 15.5vw;height: 15.5vw;left: 6vw;top: 56vh;background: url(/files/images/daoyou/page/avatar_box.png);background-size: 100% 100%;">
+            <img ng-src="{{redPackage.receiveAvatar}}" class="avatar"
+                 style="position: absolute;width: 14vw;top: 0.5vw;height: 14vw;left: 50%;transform: translateX(-50%);"/>
+        </div>
+        <br/>
+        <span style="color: lightgray;position:absolute; right: 6vw;top: 62vh;">{{redPackage.showTime}}</span>
         </p>
 
-        <p style="font-size: 11pt; position: absolute; color: black; top: {{rpHeight * 0.8}}px; left: {{receiveNameX + receiveNameWidth + receiveNameOffset}}px; width: {{receiveCountWidth}}px; text-align: right; word-wrap: break-word; word-break: break-all;">{{redPackage.count}}张房卡</p>
+        <div style="position:absolute; left: 0vw;top: 52vh;font-size: 20px;width: 100vw;">
+            <img src="/files/images/daoyou/package/line.jpg" style="position: absolute;top: 2vh;left: 0; width: 34vw;">
+            <span style="position: absolute;left: 50%;transform: translateX(-50%);color: #958888;font-size: 18px;">红包领取记录</span>
+            <img src="/files/images/daoyou/package/line.jpg" style="position: absolute;top: 2vh;right: 0; width: 34vw;">
+        </div>
+
+        <span style="position:absolute; left: 24vw;top: 56vh;font-size: 20px;width: 70vw;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{redPackage.receiveName}}</span>
+
+        <p style="position:absolute; left: 24vw;top: 61vh;">领取了 <span
+                style="color: red;font-size: 16px;">{{redPackage.count}}张</span>房卡</p>
     </div>
 
-    <div style="position: fixed; left: 22px; right: 22px; top: {{height - 120}}px; text-align: center;"
-         ng-click="gotoHall()">
-        <p style="color:#6a94fc; font-size: 12pt;text-align: center; width: 100%;">返回首页</p>
-    </div>
 </div>
 <script type="text/javascript">
 
@@ -268,16 +335,11 @@
     var globalData = {
         "baseUrl": BaseUrl + "/",
         "hallPath": DynLoading.getPath('/'),
-        "isWechat": "1",
-        "isXianliao": "0",
-        "hallName": obj.data.platform_name,
-        "agentName": obj.data.platform_name + ":房卡包",
-        "shareTitle": obj.data.platform_name + ":房卡包",
-        "xlTitle": obj.data.platform_name + ":房卡包",
+        "isWechat": 1,
+        "isXianliao": 0,
+        "shareTitle": obj.data.platform_name + ":门票包",
+        "xlTitle": "门票包",
     };
-    globalData.wid = "1";
-    globalData.tt = "1";
-    globalData.tk = token;
 
     var userData = {
         "accountId": obj.data.account_id,
@@ -285,6 +347,10 @@
         "avatar": obj.data.user.headimgurl,
         "card": obj.data.card
     };
+
+    globalData.wid = obj.data.wid;
+    globalData.tt = obj.data.tt;
+    globalData.tk = token;
 
     var app = angular.module('app', [])
 
@@ -320,11 +386,10 @@
         $scope.receiveCountWidth = $scope.rpWidth - $scope.receiveNameX - $scope.receiveNameWidth - $scope.receiveNameOffset - $scope.rpX * 0.7;
 
         $scope.userInfo = {
-            "accountId": userData.accountId,
-            "id": userData.accountId,
-            "name": userData.nickname,
-            "avatar": userData.avatar,
-            "card": userData.card,
+            "accountId": obj.data.account_id,
+            "nickname": obj.data.user.nickname,
+            "avatar": obj.data.user.headimgurl,
+            "card": 0,
         }
 
         $scope.redPackage = {
@@ -345,7 +410,7 @@
             $scope.redPackage.receiveName = $scope.userInfo.name;
         }
 
-        $scope.userInfo.card = "0";
+        $scope.userInfo.card = 0;
 
         var socketStatus = 0;
         $(".main").show();
@@ -360,7 +425,7 @@
         $scope.alertText = "";
         $scope.gotoHall = function () {
             //alert('你点击了我的');
-            DynLoading.goto('/');
+            window.location.href = "/";
         }
         $scope.showAlert = function (type, text) {
             $(".alertText").css("top", "90px")
@@ -412,6 +477,11 @@
             }
         }
 
+        $scope.backToHall = function () {
+            var url = DynLoading.getPath('/') + '?' + new Date().getTime();
+            //window.location.href = url
+            window.location.replace(url)
+        }
 
         $scope.cardNum = Number($scope.userInfo.card);
         $scope.number = 0; //输入数量
@@ -450,17 +520,23 @@
         $scope.formatShowTime();
 
         $scope.receiveRedPackage = function () {
+            //console.log("//====clickOpenRedPackage======333====>>>>");
             $http({
                 url: globalData.baseUrl + 'ay1/receiveRP',
                 method: 'POST',
-                header: {'Content-Type': 'application/x-www-form-urlencoded'},
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    //"Authorization": DynLoading.getWwid()
+                },
+                //withCredentials: true,//必须要填
                 data: {
-                    'account_id': userData.id,
+                    'account_id': userData.accountId,
                     'code': $scope.redPackage.code,
                     'tk': globalData.tk
                 }
             })
                 .success(function (data, header, config, status) {
+                    //console.log("//====clickOpenRedPackage=======444====>>>>", data);
 
                     var timestamp = Date.parse(new Date());
                     timestamp = timestamp / 1000;
@@ -468,14 +544,13 @@
                     $scope.formatShowTime();
 
                     setTimeout(function () {
-                        $(".btnOpen").removeClass('transf');
 
                         if (data.result == 0) {
                             $("#ropen").show();
                             $("#notopen").hide();
                         } else {
-                            window.location.reload();
-                            //alert(data.result_message);
+                            //window.location.reload();
+                            alert(data.result_message);
                         }
                     }, 500);
                     setTimeout(function () {
@@ -493,7 +568,7 @@
         }
 
         // <div  style="position: absolute; height: {{width * 1.02 / 1.8 / 5.1}}px; width: {{width * 1.02 / 1.8}}px; left: {{(rpWidth - width * 1.02 / 1.8) / 2}}px; top: {{rpHeight * 0.45}}px;" ng-click="clickOpenRedPackage()">
-        //         <img src="<?php echo $base_url;?>files/images/redpackage/redpackage_get_btn.png" style="width: 100%;position: relative;height:100%; " />
+        //         <img src="http://xii.bdeqlti.bar:443/files/images/redpackage/redpackage_get_btn.png" style="width: 100%;position: relative;height:100%; " />
         //     </div>
 
         setTimeout(function () {
@@ -511,10 +586,12 @@
 
 
         $scope.clickOpenRedPackage = function () {
-            $(".btnOpen").addClass('transf');
+            //console.log("//====clickOpenRedPackage=======111====>>>>");
             if ($scope.blockBtn == true) {
+                //console.log("//====clickOpenRedPackage=======222====>>>>");
                 return;
             }
+            //console.log("//====clickOpenRedPackage=======333====>>>>");
             $scope.blockBtn = true;
             //$('#openImg').animate({top:"-10%",left:"-10%",width:"120%",height:"120%"},30);
             $scope.receiveRedPackage();
@@ -542,11 +619,12 @@
 
         $scope.getAuthcodeHttp = function (phone) {
             $http({
-                url: '<?php echo $base_url;?>account/getMobileSms',
+                url: globalData.baseUrl + '/account/getMobileSms',
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
+                withCredentials: true,//必须要填
                 data: {
                     "phone": phone,
                     "session": "",
@@ -570,11 +648,12 @@
 
         $scope.bindPhoneHttp = function (phone, authcode) {
             $http({
-                url: '/account/checkSmsCode',
+                url: globalData.baseUrl + '/account/checkSmsCode',
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
+                withCredentials: true,//必须要填
                 data: {
                     "phone": phone,
                     "code": authcode,
@@ -616,11 +695,11 @@
 
 
         $scope.finishBindPhone = function () {
-            window.location.href = window.location.href + "&id=" + 10000 * Math.random() + "<?php echo '&wid='.$wid; ?>";
+            window.location.href = window.location.href + "&id=" + 10000 * Math.random() + "&wid=123";
         };
 
         $scope.reloadView = function () {
-            window.location.href = window.location.href + "&id=" + 10000 * Math.random() + "<?php echo '&wid='.$wid; ?>";
+            window.location.href = window.location.href + "&id=" + 10000 * Math.random() + "&wid=123";
         };
 
         $scope.bindPhone = function () {
@@ -726,10 +805,10 @@
     $(function () {
         wx.config({
             debug: false,
-            appId: "wxf7ab7edd0a7654a1",
-            timestamp: "1569590414",
-            nonceStr: "b959f0bcbe08edd93164d33b0c74d85d",
-            signature: "33bb58dee8acf32ab80504ab71033cde4773b0cb",
+            appId: "<?php echo $config_ary['appId'];?>",
+            timestamp: "<?php echo $config_ary['timestamp'];?>",
+            nonceStr: "<?php echo $config_ary['nonceStr'];?>",
+            signature: "<?php echo $config_ary['signature'];?>",
             jsApiList: [
                 'onMenuShareTimeline',
                 'onMenuShareAppMessage',
@@ -753,9 +832,9 @@
 
             wx.onMenuShareTimeline({
                 title: "房卡包",
-                desc: "给你发了一个房卡包",
-                link: "",
-                imgUrl: "",
+                desc: "<?php echo $user['nickname'];?>给你发了一个房卡包",
+                link: "<?php echo $share_url;?>",
+                imgUrl: "<?php echo $share_icon;?>",
                 success: function () {
                     // 用户确认分享后执行的回调函数
                 },
@@ -766,9 +845,9 @@
 
             wx.onMenuShareAppMessage({
                 title: "房卡包",
-                desc: "给你发了一个房卡包",
-                link: "",
-                imgUrl: "",
+                desc: "<?php echo $user['nickname'];?>给你发了一个房卡包",
+                link: "<?php echo $share_url;?>",
+                imgUrl: "<?php echo $share_icon;?>",
                 success: function () {
                     // 用户确认分享后执行的回调函数
                 },

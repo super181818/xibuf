@@ -8,11 +8,6 @@
     <meta name="format-detection" content="telephone=no"/>
     <meta name="msapplication-tap-highlight" content="no"/>
     <title>加载中...</title>
-	<link rel="stylesheet" type="text/css" href="/files/css/loading.css?v=2">
-    <link rel="stylesheet" type="text/css" href="/files/css/alert.css?v=2">
-    <link rel="stylesheet" type="text/css" href="/files/css/apply.css?v=2">
-    <link rel="stylesheet" type="text/css" href="/files/css/hall.css?v=2">	
-    <link rel="stylesheet" type="text/css" href="/files/css/club.css?v=2">
     <script type="text/javascript">
         var _thost = 'http://' + window.location.host;
         var pathArr = window.location.pathname.split("/");
@@ -58,7 +53,7 @@
      ng-if="isShowLoading2">
     <img class="loadingNum" ng-src="/files/images/daoyou/loading/loading_bg.png"
          style="position:fixed;top: 50%;left: 50%;transform: translate(-50%,-50%);width: 26vw;">
-    <img class="loadingNum" ng-src="/files/images/daoyou/loading/touzi.gif"
+    <img class="loadingNum" ng-src="/files/images/daoyou/loading/{{loadingNum}}.png"
          style="position:fixed;top: 50%;left: 50%;transform: translate(-50%,-50%);width: 13vw;">
 </div>
 
@@ -613,13 +608,6 @@
                                      ng-show="createInfo.bbullx.max_count_type==9"/>
                                 <div class="selectText">21人</div>
                             </div>
-                            <div class="selectItem" style="margin-left: 1.5vh;margin-left: 0.18rem !important;"
-                                 ng-click="selectChange(7,10)">
-                                <div class="selectBox"></div>
-                                <img src="/files/images/daoyou/hall/tick.png"
-                                     ng-show="createInfo.bbullx.max_count_type==10"/>
-                                <div class="selectText">23人</div>
-                            </div>                            
                         </div>
                     </div>
 
@@ -729,16 +717,6 @@
                                     <option value="8">8</option>
                                     <option value="9">9</option>
                                     <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                    <option value="13">13</option>
-                                    <option value="14">14</option>
-                                    <option value="15">15</option>
-                                    <option value="16">16</option>
-                                    <option value="17">17</option>
-                                    <option value="18">18</option>
-                                    <option value="19">19</option>
-                                    <option value="20">20</option>                                    
                                 </select>
                                 <div class="text" style="">王牌(万能牌)</div>
                             </div>
@@ -770,8 +748,6 @@
                                 </div>
                                 <div class="selectText selectText2" ng-show="createInfo.bbullx.max_count_type==9">12局
                                 </div>
-                                <div class="selectText selectText2" ng-show="createInfo.bbullx.max_count_type==10">12局
-                                </div>
                                 <div style="float:left;">
                                     <img src="/files/images/daoyou/hall/card.png"
                                          style="position: relative;width: 0.4rem;height: 0.55rem;margin-top: 0.05rem;"/>
@@ -793,8 +769,6 @@
                                 <div class="selectText selectText2" ng-show="createInfo.bbullx.max_count_type==8">x12
                                 </div>
                                 <div class="selectText selectText2" ng-show="createInfo.bbullx.max_count_type==9">x15
-                                </div>
-                                <div class="selectText selectText2" ng-show="createInfo.bbullx.max_count_type==10">x18
                                 </div>
                             </div>
                             <div class="selectItem" ng-click="selectChange(4,2)" style="width: 40%;margin: 0.05rem 0;">
@@ -819,8 +793,6 @@
                                 </div>
                                 <div class="selectText selectText2" ng-show="createInfo.bbullx.max_count_type==9">24局
                                 </div>
-                                <div class="selectText selectText2" ng-show="createInfo.bbullx.max_count_type==10">24局
-                                </div>
                                 <div style="float:left;">
                                     <img src="/files/images/daoyou/hall/card.png"
                                          style="position: relative;width: 0.4rem;height: 0.55rem;margin-top: 0.05rem;"/>
@@ -842,8 +814,6 @@
                                 <div class="selectText selectText2" ng-show="createInfo.bbullx.max_count_type==8">x24
                                 </div>
                                 <div class="selectText selectText2" ng-show="createInfo.bbullx.max_count_type==9">x30
-                                </div>
-                                <div class="selectText selectText2" ng-show="createInfo.bbullx.max_count_type==10">x36
                                 </div>
 
                             </div>
@@ -890,12 +860,12 @@
                                      ng-show="createInfo.bbullx.is_allow_club==1"/>
                                 <div class="selectText">只允许俱乐部加入</div>
                             </div>
-                            <!--div class="selectItem" ng-click="selectChange(10,3)" style="width: 40%;">
+                            <div class="selectItem" ng-click="selectChange(10,3)" style="width: 40%;">
                                 <div class="selectBox"></div>
                                 <img src="/files/images/daoyou/hall/tick.png"
                                      ng-show="createInfo.bbullx.is_ban_guest==1"/>
                                 <div class="selectText">禁止观战</div>
-                            </div-->
+                            </div>
                             <div class="selectItem" ng-click="selectChange(9,4)" style="width: 50%;">
                                 <div class="selectBox"></div>
                                 <img src="/files/images/daoyou/hall/tick.png" ng-show="createInfo.bbullx.can_rub==1"/>
@@ -5609,7 +5579,7 @@
 
         <div class="entrance">
             <!--    三个牛牛     -->
-            <div class="img34 img" ng-click="createBBullx()"></div>
+            <div class="img34 img" ng-click="createBBullx()" style="background: url(/files/images/gameicon_jiuyou/icon_bullx.png);"></div>
             <!--        <div class="img28 img" ng-click="createBullx17()"></div>-->
             <!--        <div class="img29 img" ng-click="createBullx15()"></div>-->
             <!--        <div class="img15 img" ng-click="createBullx13()"></div>-->
@@ -5938,18 +5908,27 @@
     </div>
 
 </div>
-	
+
 <script src="/files/js/jweixin-1.0.0.js"></script>
-<script type="text/javascript" src="/files/js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="/files/js/angular.min.js"></script>
-<script type="text/javascript" src="/files/js/fastclick.js"></script>
-<script type="text/javascript" src="/files/js/jquery.marquee.min.js"></script>
-<script type="text/javascript" src="/files/js/clipboard.min.js"></script>
-<script type="text/javascript" src="/files/js/rem.js"></script>
-<script type="text/javascript" src="/fiesc/js/aes.js"></script>
-<script type="text/javascript" src="/files/js/md5.js"></script>	
 <script type="text/javascript">
+    //------css
+    DynLoading.css(ResourceUrl + 'files/css/loading.css?v=2');
+    DynLoading.css(ResourceUrl + 'files/css/alert.css?v=2');
+    DynLoading.css(ResourceUrl + 'files/css/apply.css?v=2');
+    DynLoading.css(ResourceUrl + 'files/css/hall_jiuyou.css?v=3');
+    DynLoading.css(ResourceUrl + 'files/css/club.css?v=2');
+
+    //------js
+    DynLoading.js(ResourceUrl + 'files/js/fastclick.js');
+    DynLoading.js(ResourceUrl + 'files/js/clipboard.min.js');
+    DynLoading.js(ResourceUrl + 'files/js/rem.js');
+    DynLoading.js(ResourceUrl + 'fiesc/js/aes.js');
+    DynLoading.js(ResourceUrl + 'files/js/md5.js');
+
     var Setting = {globalData: {}, userData: {}};
+    DynLoading.js(ResourceUrl + 'files/js/jquery-1.9.1.min.js', function () {
+        DynLoading.js(ResourceUrl + 'files/js/jquery.marquee.min.js');
+        DynLoading.js(ResourceUrl + 'files/js/angular.min.js', function () {
             var code = DynLoading.getUrlParam("code");
             let token = window.localStorage.getItem('token');
             if (!token) {
@@ -5964,9 +5943,11 @@
                         }
                     } else {
                         DynLoading.gotoWx();
+                        return;
                     }
                 } else {
                     DynLoading.goto('login');
+                    return;
                 }
             }
 
@@ -5983,13 +5964,14 @@
                 window.localStorage.removeItem('return_url');
                 window.localStorage.setItem('return_url', window.location.href);
                 DynLoading.goto('login');
+                return;
             }
             if (code && obj.data.tk != "") {
                 token = obj.data.tk;
                 window.localStorage.setItem('token', obj.data.tk);
             }
 
-            let _ws_host = _isTx ? 'ws://' + _wip + ':' +_wport : obj.data.ws_host;
+            let _ws_host = _isTx ? 'ws://' + _wip + ':' + obj.data.port : obj.data.ws_host;
             Setting.globalData = {
                 "baseUrl": BaseUrl,
                 "card": obj.data.card,
@@ -6022,8 +6004,10 @@
                 "isAuthPhone": obj.data.isAuthPhone,
                 "phone": obj.data.user.phone,
             }; 
+            DynLoading.js('/files/js/hall.js?v=123');
+        });
+    });
 </script>
-<script type="text/javascript" src="/files/js/hall.js?v=123"></script>
 <script>
     wx.config({
         debug: false,
